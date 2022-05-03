@@ -6,7 +6,7 @@
   "system_settings": {
     "praise": {
       "input_files": {
-        "praise_data": "Quant8-February2022-quantification-export.csv",
+        "praise_data": "praise.csv",
         "rewardboard_list": "rewardboard.csv"
       },
       "payout_token": {
