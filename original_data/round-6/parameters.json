@@ -7,7 +7,8 @@
     "praise": {
       "input_files": {
         "praise_data": "praise.csv",
-        "rewardboard_list": "rewardboard.csv"
+        "rewardboard_list": "rewardboard.csv",
+        "cross_period_root": ".."
       },
       "payout_token": {
         "token_name": "TEC",
