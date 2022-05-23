@@ -7,6 +7,7 @@ from pathlib import Path
 import papermill as pm
 import scrapbook as sb
 
+from distribution_tools.praise import forum_post_generator
 import argparse
 
 
@@ -34,14 +35,14 @@ ROOT_INPUT_PATH = ROOT_INPUT_PATH if ROOT_INPUT_PATH[-1] == "/" else (
 ROOT_OUTPUT_PATH = ROOT_INPUT_PATH + \
     params["results_output_folder"] + "/"
 
-#RAW_DATA_OUTPUT_PATH = ROOT_OUTPUT_PATH + "data/"
+# RAW_DATA_OUTPUT_PATH = ROOT_OUTPUT_PATH + "data/"
 NOTEBOOK_OUTPUT_PATH = ROOT_OUTPUT_PATH + "executed_notebooks/"
 REPORT_OUTPUT_PATH = ROOT_OUTPUT_PATH + "reports/"
 DISTRIBUTION_OUTPUT_PATH = ROOT_OUTPUT_PATH + "raw_csv_exports/"
 
 # create output file structure:
 Path(ROOT_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
-#Path(RAW_DATA_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
+# Path(RAW_DATA_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
 Path(NOTEBOOK_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
 Path(REPORT_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
 Path(DISTRIBUTION_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
@@ -97,7 +98,10 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
 
     # prepare the parameter set we will use for analysis and the folder with the notebook templates
     analysis_params = {"dist_notebook_path": dist_output_path,
-                       "input_files": system_params["input_files"]}
+                       "input_files": system_params["input_files"],
+                       "distribution_parameters": system_params,
+                       }
+   # print(analysis_params)
 
     ANALYSIS_NOTEBOOK_FOLDER = "./analysis_tools/notebooks/" + reward_system + "/"
 
@@ -137,3 +141,6 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
             html_report_destination = REPORT_OUTPUT_PATH + params["distribution_name"] + "_" +\
                 notebook[:-6] + "_Report.html"
             os.rename(html_report_origin, html_report_destination)
+
+with open(DISTRIBUTION_OUTPUT_PATH + 'forum_post.md', 'w') as output:
+    output.write(forum_post_generator.generate_post(params, ROOT_INPUT_PATH))
