@@ -3,6 +3,7 @@ import subprocess
 import json
 import shutil
 from pathlib import Path
+from natsort import natsorted
 
 import papermill as pm
 import scrapbook as sb
@@ -109,7 +110,8 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
         print(f'{reward_system} analysis notebook not provided, skip analysis.')
     else:
         # run all notebooks in the analysis folder
-        for notebook in os.listdir(ANALYSIS_NOTEBOOK_FOLDER):
+        sorted_contents = natsorted(os.listdir(ANALYSIS_NOTEBOOK_FOLDER))
+        for notebook in sorted_contents:
 
             # make sure we only use .ipynb files
             if not (notebook.endswith(".ipynb")):
