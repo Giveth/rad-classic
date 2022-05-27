@@ -13,7 +13,7 @@ def prepare_praise_flow(dataframe_in, n_senders, n_receivers):
     reference_df.dropna(subset=['FROM', 'TO', 'AVG SCORE'], inplace=True)
     reference_df.reset_index(inplace=True, drop=True)
 
-    # sank_df1=df1.copy()
+
     # Left side. Praise senders. X largest ones + rest (others). (-1 because of zero-counting)
     n1 = n_senders - 1
     # Right side. Praise receivers. Y larget one + rest (others) (-1 because of zero-counting)
@@ -46,13 +46,9 @@ def prepare_praise_flow(dataframe_in, n_senders, n_receivers):
 
     df4 = df3.copy()
 
-    # Change to "df4=df4.groupby(['From', 'To']).count().copy()" in case you need count of events, but not sum of IH
     df4 = df4.groupby(['FROM', 'TO']).sum().copy()
 
     df4.reset_index(inplace=True, drop=False)
     df4['TO'] = df4['TO']+' '
-    # df_to2=reference_df.groupby(['To']).sum().copy()
 
-    # df3=reference_df.copy()
-    #df3.loc[df3['nominated_stake']<
     return df4

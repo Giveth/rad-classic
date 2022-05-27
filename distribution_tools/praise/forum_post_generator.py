@@ -53,9 +53,4 @@ The Rewards Distribution for this round is as follows:
 
     output += markdown_table
 
-    #text = (f"This period covers praise given between {asd} and {asd}.")
-    #output = markdown.markdown(text)
-
-    #text = (f"This period covers praise given between {asd} and {asd}. We allocated 4154 TEC tokens for rewards, with a 100:0 split between Praise and Sourcecred. Some praise accounts still haven’t been activated so the total amount below will be less than what we set aside to distribute. /n Out of the total rewards: /n /t{asd} of the tokens were given as praise rewards :pray: /n /t {asd}% distributed among quantifiers :balance_scale: /n /t {asd} assigned to the reward board :memo: /n /nThis data has been reviewed by the Quantifiers and the Reward Board, and has been submitted for distribution to the Reward Board DAO 1 /n You can check out the full period analysis here 11. :bar_chart: /n This post will be open to the community for review for 48 hours then submitted to the Reward Board for final execution. :heavy_check_mark: /n The Rewards Distribution for this round is as follows:")
-
     return output
