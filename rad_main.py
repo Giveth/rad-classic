@@ -36,7 +36,7 @@ ROOT_INPUT_PATH = ROOT_INPUT_PATH if ROOT_INPUT_PATH[-1] == "/" else (
 ROOT_OUTPUT_PATH = ROOT_INPUT_PATH + \
     params["results_output_folder"] + "/"
 
-# RAW_DATA_OUTPUT_PATH = ROOT_OUTPUT_PATH + "data/"
+
 NOTEBOOK_OUTPUT_PATH = ROOT_OUTPUT_PATH + "executed_notebooks/"
 REPORT_OUTPUT_PATH = ROOT_OUTPUT_PATH + "reports/"
 DISTRIBUTION_OUTPUT_PATH = ROOT_OUTPUT_PATH + "raw_csv_exports/"
@@ -49,12 +49,13 @@ Path(DISTRIBUTION_OUTPUT_PATH).mkdir(parents=True, exist_ok=True)
 
 # apply all specified reward systems
 for i, reward_system in enumerate(params["employed_reward_systems"]):
-	
+
     print(f"\n\
 \t=========================================\n \t\t\t{reward_system.capitalize()}   \n\t=========================================")
 
     if params["token_allocation_per_reward_system"][i] == "0":
-        print(f'>>> No reward allocation for {params["employed_reward_systems"][i]}, skipping.')
+        print(
+            f'>>> No reward allocation for {params["employed_reward_systems"][i]}, skipping.')
         continue
 
     print("\nDISTRIBUTION:")
@@ -81,7 +82,7 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
 
         dist_input_path = DISTRIBUTION_NOTEBOOK_FOLDER + notebook
         dist_output_path = NOTEBOOK_OUTPUT_PATH + "output_" + notebook
-        
+
         print(f"\n|---{notebook} :")
 
         pm.execute_notebook(
@@ -105,7 +106,6 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
                        "input_files": system_params["input_files"],
                        "distribution_parameters": system_params,
                        }
-
 
     ANALYSIS_NOTEBOOK_FOLDER = "./analysis_tools/notebooks/" + reward_system + "/"
 
