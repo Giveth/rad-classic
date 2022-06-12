@@ -2,8 +2,6 @@ import pandas as pd
 import numpy as np
 
 
-# FUNCTIONS FROM THE IH DISTRIBUTION NOTEBOOK
-
 # To be called from outside
 
 def resource_percentage(x, p):
