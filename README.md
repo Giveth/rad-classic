@@ -1,10 +1,8 @@
-**[NOTE: This is a Work-In-Progress. The default settings take inputs stored in "test_inputs" and save them in a folder called "round_x", using dummy notebooks]**
-
 # Modular R.A.D Dashboard
 
 This is the repository for the modular Reward Analysis and Distribution Dashboard (R.A.D.D). The system takes a set of raw DAO activity records and calculates a corresponding token distribution, along with generating HTML reports analyzing the data. This is done through a set of interconnected Jupyter notebooks.
 
-This program is intended to run on the backend server of a DAO's reward system, and will automatically push the results to a github repository for easy auditability by non-technical DAO members.
+This repository is intended to be cloned and run as-is. The input data and analysis results are loaded from and pushed to a separate repository to have a clean and easily auditable reward commit ledger. In the case of the TEC, that repository is [tec-rewards](https://github.com/CommonsBuild/tec-rewards)
 
 ## Setup
 
@@ -24,23 +22,23 @@ pip install -r requirements.txt
  python rad_main.py -p /path/to/round/folder
 ```
 
-The specified folder must contain the parameters.json you want to use in the distribution
+The specified folder must contain the parameters.json file you want to use in the distribution
 
-The script will take the information in the specified parameters file and save the resulting artefacts in a new folder called "distribution_results". The resulting folder struvture is intended to be easily auditable and in a production system would probably be pushed to separate repository with clear access control.
+The script will take the information in the specified parameters file and save the resulting artefacts in a new folder called "distribution_results". The resulting folder structure is intended to be easily auditable and should be pushed to a separate repository with clear access control.
 
 The running of the script is intended to be automatable. In an ideal case it would be just appended to the regular "reward period closing" in the backend, and generate all outputs without human intervention.
 
 ## Workstream
 
-The script will take a set of csv files and apply a group of reward systems systems to them as specifed in the JSON parameters file.
+The script will take a set of csv files and run them a set of reward systems specifed in the JSON parameters file.
 
-- First, it will calculate the distribution of reward tokens and export it by running the data through a "distribution notebook", where the reards algorithm lives.
+- First, it will calculate the distribution of reward tokens and export it by running the data through a "distribution notebook", where the rewards algorithm lives.
 - The resulting data is then fed to a set of separate analysis notebooks templates, each designed to grant insights into a specific aspect of the distribution. These notebooks use analysis methods stored in the form of python modules to generate HTML report files, which can then easily be accessed (while keeping graphs interactive, as opposed to PDF files).
 
 At the end of the process, following files will have been stored, ready to be pushed to github:
 
-- A copy of all the raw data used to generate the distribution
-- CSV files containing the resulting distribution, both in human-readable and machine-feedablr formats (WIP in the current version)
+- CSV files detailing the resulting distribution
+- Additional files containing the distribution in a machine-feedable formats (like the aragon transaction app, a machine-generated forum post, etc), or processed in ways to help human review (like quantifier overviews, "controversial praise", etc)
 - One HTML report for each analysis.
 - Backup copies of all the run notebooks in their finalized state, with the data used in that round. These contain exactly the same information as the HTML reports, but add the code cells that generated it. They are stored exclusively to facilitate future audits.
 
@@ -48,7 +46,7 @@ At the end of the process, following files will have been stored, ready to be pu
 
 ### Non-technical DAO members
 
-This is expected to be the majority of the users. They can access the results repository and freely download and run the reports in their browser without needing to install anything. They can also import the csv files to excel or google docs. The result notebooks can be audited online with mybinder.
+This is expected to be the majority of the users. They can access the results repository and freely download and run the reports in their browser without needing to install anything. The reports can also be read online without downloading using a tool like [https://rawcdn.githack.com/](https://rawcdn.githack.com/). They can also import the csv files to excel or google docs. The result notebooks can be audited online with [mybinder](https://mybinder.org/).
 
 ### System administrator
 
@@ -58,8 +56,4 @@ Administrators are expected to install this system on the backend server and gen
 
 If other DAOs want to integrate the dashboard and add their own reward systems, this can be done easily. They only need to create a new set of notebooks and save them in a correctly labeled folder. Since most of the logic is saved in the external python modules, they can easily import already developed analytics into their own framework. They can also copy the existing notebooks modify them to suit their needs. Since Jupyter supports several programming languages, they can even develop the notebooks in the language of their choice and have them integrate with the rest of the system out of the box.
 
-## Future developments
 
--Automatic Github export (high priority)
--Integration with backend database (so csv exports aren't necessary)
--POSSIBLY: Hosted frontend on which to access distribution results and load the HTMLs in a more user-friendly way, in the style of [this image](https://images.zenhubusercontent.com/5fdba670baa205320c5a291e/0e7b21b2-a8ec-40e4-9a31-07f6d64eb4bb)
