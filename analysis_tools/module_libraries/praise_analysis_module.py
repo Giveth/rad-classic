@@ -1,15 +1,42 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
+def data_by_quantifier(praise_data):
+    quant_only = pd.DataFrame()
+    #praise_data.drop(['DATE', 'TO USER ACCOUNT', 'TO USER ACCOUNT ID', 'TO ETH ADDRESS', 'FROM USER ACCOUNT', 'FROM USER ACCOUNT ID', 'FROM ETH ADDRESS', 'REASON', 'SOURCE ID', 'SOURCE NAME', 'AVG SCORE'], axis=1, inplace=True)
+    num_of_quants = len(praise_data.filter(like='QUANTIFIER').columns)
+    for i in range(num_of_quants):
+        q_name =  str( 'QUANTIFIER '+ str(i+1) +' USERNAME' )
+        q_value = str('SCORE '+str(i+1) )
+        q_duplicate = str('DUPLICATE ID '+str(i+1) )
+        buf = praise_data[['ID', q_name , q_value, q_duplicate]].copy()
+
+        #delete the duplicated rows
+        buf = buf.loc[buf[q_duplicate].isnull()] # only include the non-duplicated rows
+        buf = buf[['ID', q_name , q_value]] # don't need the duplication info anymore
+        buf=buf.dropna() # NA comes from when the quantifier is less than given in cross-period analysis      
+    
+        buf.rename(columns={q_name: 'QUANT_ID',  q_value: 'QUANT_VALUE', 'ID':'PRAISE_ID'}, inplace=True)
+
+        quant_only = quant_only.append(buf.copy(), ignore_index=True)
+
+    columnsTitles = ['QUANT_ID', 'PRAISE_ID', 'QUANT_VALUE']
+    quant_only.sort_values(['QUANT_ID', 'PRAISE_ID'], inplace=True)
+    quant_only =  quant_only.reindex(columns=columnsTitles).reset_index(drop=True)
+    return quant_only
 
 
-class praise_round():
+class praise_quantifier():
     def __init__(self, praisedata=pd.DataFrame(), quantifiertable=pd.DataFrame()):
         self.df = praisedata
+        
+        if len(quantifiertable)==0:
+            quantifiertable = data_by_quantifier(praisedata.copy())
         self.quantratingdf = quantifiertable
         self.quantlist = self._get_valid_quantifier()
         self.metrics_df = self._get_participant_metrics()
         return
+    
 
     def _get_valid_quantifier(self):
         df = self.df
@@ -20,6 +47,8 @@ class praise_round():
         for kq, quantid in enumerate(quantlist):
             quantdf = quantifier_rating_table.loc[quantifier_rating_table['QUANT_ID'] == quantid]
             if set(quantdf['QUANT_VALUE'].values) == {0}:
+                valid_qt[kq] = False
+            if quantid == 'None':
                 valid_qt[kq] = False
         quantlist = quantlist[valid_qt]
         return quantlist
@@ -61,6 +90,7 @@ class praise_round():
         for QUANT_ID in self.quantlist:
             quantdf = quantifier_rating_table.loc[quantifier_rating_table['QUANT_ID'] == QUANT_ID]
             av_scores_others = []
+            score_quant = []
             scoredist = []
             scoredisplace = []
             for kr, row in quantdf.iterrows():
@@ -71,14 +101,22 @@ class praise_round():
                 otherscores = praise_row.filter(
                     like='SCORE ').values.tolist()[0]
                 otherscores.remove(quantifier_score)
+                
                 otherscores = np.array(otherscores)
+                otherscores = otherscores[~np.isnan(otherscores)]
+
+                if len(otherscores) <2:
+                    continue
                 av_scores_others.append(np.mean(otherscores))
+                score_quant.append(quantifier_score)
                 # like "standar deviation" from this score
                 scoredist.append(
                     np.sqrt(sum((quantifier_score - otherscores)**2))/(len(otherscores)))
                 scoredisplace.append(np.mean(quantifier_score - otherscores))
+               
+                
             coef = np.corrcoef(
-                quantdf['QUANT_VALUE'].values, av_scores_others)[1, 0]
+                score_quant, av_scores_others)[1, 0]
             quantifier_coef.append(coef)
             quantifier_score_displace.append(np.mean(scoredisplace))
         quantifier_metrics_df = pd.DataFrame(index=self.quantlist, data={
@@ -98,6 +136,7 @@ class praise_round():
         fig = px.bar(quantifier_metrics_df.sort_values(by='av_score_displacement'), y='av_score_displacement',
                      title="Do one tends to give higher or lower scores than the other quantifiers?")
         return fig
+
 
 
 # courtesy of @inventandchill
