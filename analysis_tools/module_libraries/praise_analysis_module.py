@@ -1,6 +1,34 @@
 import pandas as pd
 import numpy as np
 import plotly.express as px
+
+import nltk
+from nltk.tokenize import RegexpTokenizer
+from nltk.corpus import stopwords
+import re
+nltk.download('stopwords')
+
+# cleaning master function
+def clean_praise(praise):
+    # code adapted from: https://ourcodingclub.github.io/tutorials/topic-modelling-python/
+    my_stopwords = nltk.corpus.stopwords.words('english')
+    word_rooter = nltk.stem.snowball.PorterStemmer(ignore_stopwords=False).stem # clean words to the "stem" (e.g. words->word, talked->talk)
+    my_punctuation = '!"$%&\'()*+,-./:;<=>?[\\]^_`{|}~•@'
+
+    praise = praise.lower() # lower case
+    praise = re.sub('['+my_punctuation + ']+', ' ', praise) # strip punctuation
+    praise = re.sub('\s+', ' ', praise) #remove double spacing
+    praise = re.sub('([0-9]+)', '', praise) # remove numbers
+    praise_token_list = [word for word in praise.split(' ')
+                            if word not in my_stopwords] # remove stopwords
+
+    praise_token_list = [word_rooter(word) if '#' not in word else word
+                        for word in praise_token_list] # apply word rooter
+
+    praise = ' '.join(praise_token_list)
+    return praise
+
+
 def data_by_quantifier(praise_data):
     quant_only = pd.DataFrame()
     #praise_data.drop(['DATE', 'TO USER ACCOUNT', 'TO USER ACCOUNT ID', 'TO ETH ADDRESS', 'FROM USER ACCOUNT', 'FROM USER ACCOUNT ID', 'FROM ETH ADDRESS', 'REASON', 'SOURCE ID', 'SOURCE NAME', 'AVG SCORE'], axis=1, inplace=True)
