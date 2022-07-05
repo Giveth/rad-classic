@@ -74,6 +74,9 @@ class praise_quantifier():
         valid_qt = np.ones_like(quantlist, dtype=bool)*True
         for kq, quantid in enumerate(quantlist):
             quantdf = quantifier_rating_table.loc[quantifier_rating_table['QUANT_ID'] == quantid]
+            # exclude invalid IDs
+            if len(quantdf)==0:
+                valid_qt[kq] = False
             if set(quantdf['QUANT_VALUE'].values) == {0}:
                 valid_qt[kq] = False
             if quantid == 'None':
@@ -123,6 +126,8 @@ class praise_quantifier():
             scoredisplace = []
             for kr, row in quantdf.iterrows():
                 quantifier_score = row['QUANT_VALUE']
+                if np.isnan(quantifier_score):
+                    continue
                 praise_id = row['PRAISE_ID']
                 praise_row = df.loc[df['ID'] == praise_id]
 
