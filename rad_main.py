@@ -97,7 +97,9 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
             continue
 
         csv_destination = DISTRIBUTION_OUTPUT_PATH + output_csv
-        os.rename(output_csv, csv_destination)
+        shutil.copy(output_csv, csv_destination)
+        os.remove(output_csv)
+
 
     print("\nANALYSIS:")
 
@@ -136,7 +138,8 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
                 if not (output_csv.endswith(".csv")):
                     continue
                 csv_destination = DISTRIBUTION_OUTPUT_PATH + output_csv
-                os.rename(output_csv, csv_destination)
+                shutil.copy(output_csv, csv_destination)
+                os.remove(output_csv)
 
             # generate HTML report
             return_buf = subprocess.run(
@@ -146,7 +149,8 @@ for i, reward_system in enumerate(params["employed_reward_systems"]):
             html_report_origin = nb_destination_path[:-6] + ".html"
             html_report_destination = REPORT_OUTPUT_PATH + params["distribution_name"] + "-" +\
                 notebook[2:-6] + "-report.html"
-            os.rename(html_report_origin, html_report_destination)
+            shutil.copy(html_report_origin, html_report_destination)
+            os.remove(html_report_origin)
 
 with open(DISTRIBUTION_OUTPUT_PATH + 'forum_post.md', 'w') as output:
     output.write(forum_post_generator.generate_post(params, ROOT_INPUT_PATH))
