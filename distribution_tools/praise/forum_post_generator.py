@@ -3,11 +3,12 @@ import pandas as pd
 
 
 def generate_post(params, ROOT_INPUT_PATH=""):
-    praise_path = params["system_settings"]["praise"]["input_files"]["praise_data"]
+    praise_path = ROOT_INPUT_PATH + \
+    	params["system_settings"]["praise"]["input_files"]["praise_data"]
     token_table_path = ROOT_INPUT_PATH + \
         "distribution_results/raw_csv_exports/final_praise_token_allocation.csv"
     params["token_allocation_per_reward_system"] = list(
-        map(int, params["token_allocation_per_reward_system"]))
+        map(float, params["token_allocation_per_reward_system"]))
 
     data = pd.read_csv(praise_path)
     start_date = pd.to_datetime(data["DATE"].min()).date()
