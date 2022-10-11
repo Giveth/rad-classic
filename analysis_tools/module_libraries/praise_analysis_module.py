@@ -190,13 +190,21 @@ def prepare_praise_flow(dataframe_in, n_senders, n_receivers):
 
     df_from = reference_df.groupby(['FROM']).sum().copy()
     df_from.reset_index(inplace=True, drop=False)
-    min_from = df_from['AVG SCORE'].sort_values(ascending=False).unique()[n1]
+    try:
+        min_from = df_from['AVG SCORE'].sort_values(ascending=False).unique()[n1]
+    except:
+        #for the case in which the number of senders is lower than the min specifed
+        min_from = df_from['AVG SCORE'].sort_values(ascending=False).unique()[-1]
     df_from2 = df_from.copy()
     df_from2.loc[df_from2['AVG SCORE'] < min_from, 'FROM'] = 'Rest from 1'
 
     df_to = reference_df.groupby(['TO']).sum().copy()
     df_to.reset_index(inplace=True, drop=False)
-    min_to = df_to['AVG SCORE'].sort_values(ascending=False).unique()[n2]
+    try:
+        min_to = df_to['AVG SCORE'].sort_values(ascending=False).unique()[n2]
+    except:
+        #for the case in which the number of receivers is lower than the min specifed
+        min_to = df_to['AVG SCORE'].sort_values(ascending=False).unique()[-1]
     df_to2 = df_to.copy()
     df_to2.loc[df_to2['AVG SCORE'] < min_to, 'TO'] = 'Rest to 1'
 
