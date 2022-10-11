@@ -254,7 +254,7 @@ def spread_sort(praise_distribution, NUMBER_OF_QUANTIFIERS_PER_PRAISE):
     for i, row in praisecheck_clean_controversial.iterrows():
         for j, dup_id_label in enumerate(col_dupids):
 
-            if row[dup_id_label] is not None:
+            if type(row[dup_id_label]) is str:
                 # find the score
                 find_value = praisecheck_df.loc[praisecheck_df['ID']
                                                 == row[dup_id_label], col_scores[j]]
