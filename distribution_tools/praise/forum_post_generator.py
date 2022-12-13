@@ -10,6 +10,7 @@ def generate_post(params, ROOT_INPUT_PATH=""):
         map(float, params["token_allocation_per_reward_system"]))
 
     data = pd.read_csv(praise_path)
+    data.columns = data.columns.str.upper()
     start_date = pd.to_datetime(data["DATE"].min()).date()
 
     end_date = pd.to_datetime(data["DATE"].max()).date()
