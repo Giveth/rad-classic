@@ -30,11 +30,11 @@ def generate_post(params, ROOT_INPUT_PATH=""):
     token_table = pd.read_csv(token_table_path)
     token_table = token_table[["USER IDENTITY", "TOTAL TO RECEIVE"]].copy()
     token_table.rename(
-        columns={'USER IDENTITY': 'Username', 'TOTAL TO RECEIVE': 'Rewards in TEC'}, inplace=True)
+        columns={'USER IDENTITY': 'Username', 'TOTAL TO RECEIVE': 'Rewards in GIV'}, inplace=True)
     markdown_table = token_table.to_markdown(index=False)
     output = (f'''
-# TEC Rewards Distribution - {params["distribution_name"]}  - {start_date.strftime("%d/%m/%y")} to {end_date.strftime("%d/%m/%y")}
-This period covers praise given between **{start_date.strftime("%d %B %Y")} and {end_date.strftime("%d %B %Y")}**. We allocated **{total_tokens}** TEC tokens for rewards, with a **{praise_pct}:{sourcecred_pct}** split between Praise and Sourcecred. Some praise accounts still haven’t been activated so the total amount below will be less than what we set aside to distribute.
+# GIV Rewards Distribution - {params["distribution_name"]}  - {start_date.strftime("%d/%m/%y")} to {end_date.strftime("%d/%m/%y")}
+This period covers praise given between **{start_date.strftime("%d %B %Y")} and {end_date.strftime("%d %B %Y")}**. We allocated **{total_tokens}** GIV tokens for rewards, with a **{praise_pct}:{sourcecred_pct}** split between Praise and Sourcecred. Some praise accounts still haven’t been activated so the total amount below will be less than what we set aside to distribute.
 
 Out of the total rewards:
 

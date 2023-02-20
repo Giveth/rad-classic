@@ -2,7 +2,7 @@
 
 This is the repository for the modular Reward Analysis and Distribution Dashboard (R.A.D.D). The system takes a set of raw DAO activity records and calculates a corresponding token distribution, along with generating HTML reports analyzing the data. This is done through a set of interconnected Jupyter notebooks.
 
-This repository is intended to be cloned and run as-is. The input data and analysis results are loaded from and pushed to a separate repository to have a clean and easily auditable reward commit ledger. In the case of the TEC, that repository is [tec-rewards](https://github.com/CommonsBuild/tec-rewards)
+This repository is intended to be cloned and run as-is. The input data and analysis results are loaded from and pushed to a separate repository to have a clean and easily auditable reward commit ledger. In the case of the Giveth, that repository is [giveth-rewards](https://github.com/Giveth/giveth-rewards)
 
 ## Setup
 
@@ -55,5 +55,3 @@ Administrators are expected to install this system on the backend server and gen
 ### Other developers
 
 If other DAOs want to integrate the dashboard and add their own reward systems, this can be done easily. They only need to create a new set of notebooks and save them in a correctly labeled folder. Since most of the logic is saved in the external python modules, they can easily import already developed analytics into their own framework. They can also copy the existing notebooks modify them to suit their needs. Since Jupyter supports several programming languages, they can even develop the notebooks in the language of their choice and have them integrate with the rest of the system out of the box.
-
-
